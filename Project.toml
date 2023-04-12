@@ -1,0 +1,7 @@
+name = "GradedTestSets"
+uuid = "67bbe746-1617-4c00-8df4-88743516f704"
+authors = ["Adrian Hill <adrian.hill@mailbox.org>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.6"
