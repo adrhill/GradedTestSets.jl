@@ -30,5 +30,5 @@ include("show.jl")
 
 export GradedTestSet
 export result, GradingResult
-export flatten_result, descriptions, points_scored, points_total
+export flatten_result, descriptions, points_scored, points_total, tuple_scored, tuple_total
 end # module

@@ -39,7 +39,7 @@ _all_passed(ts::AbstractTestSet) = all(_all_passed, ts.results)
 # Flattening utilities #
 #======================#
 
-const DEFAULT_DESCRIPTION_DELIM = " - "
+const DEFAULT_DESCRIPTION_DELIM = " "
 function flatten_result(res::GradingResult; delim=DEFAULT_DESCRIPTION_DELIM)
     ds = NamedTuple{(:description, :points_scored, :points_total),Tuple{String,Int,Int}}[]
     push_result!(ds, res, "", delim)
@@ -48,9 +48,10 @@ end
 function push_result!(ds, r::GradingResult, prefix::String, delim)
     if isempty(prefix)
         prefix = r.description
-    else
+    elseif !isempty(r.description)
         prefix = join([prefix, r.description], delim)
     end
+    # otherwise prefix is not modified
 
     if isempty(r.subresults)
         t = (description=prefix, points_scored=r.points_scored, points_total=r.points_total)
@@ -66,5 +67,22 @@ end
 function descriptions(r::GradingResult; delim=DEFAULT_DESCRIPTION_DELIM)
     return getfield.(flatten_result(r; delim=delim), :description)
 end
+
+# TODO: avoid code duplication by generating functions
 points_scored(r::GradingResult) = getfield.(flatten_result(r), :points_scored)
 points_total(r::GradingResult) = getfield.(flatten_result(r), :points_total)
+
+
+function tuple_scored(r::GradingResult; delim=DEFAULT_DESCRIPTION_DELIM)
+    fr = flatten_result(r; delim=delim)
+    descriptions = [Symbol(r.description) for r in fr]
+    points_scored = getfield.(fr, :points_scored)
+    return (; zip(descriptions, points_scored)...)
+end
+
+function tuple_total(r::GradingResult; delim=DEFAULT_DESCRIPTION_DELIM)
+    fr = flatten_result(r; delim=delim)
+    descriptions = [Symbol(r.description) for r in fr]
+    points_total = getfield.(fr, :points_total)
+    return (; zip(descriptions, points_total)...)
+end
