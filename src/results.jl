@@ -2,8 +2,8 @@ result(ts::GradedTestSet) = GradingResult(ts)
 
 struct GradingResult
     description::String
-    points_scored::Int
-    points_total::Int
+    points_scored::Real
+    points_total::Real
     all_passed::Bool
     subresults::Vector{GradingResult}
 end
@@ -41,7 +41,7 @@ _all_passed(ts::AbstractTestSet) = all(_all_passed, ts.results)
 
 const DEFAULT_DESCRIPTION_DELIM = " "
 function flatten_result(res::GradingResult; delim=DEFAULT_DESCRIPTION_DELIM)
-    ds = NamedTuple{(:description, :points_scored, :points_total),Tuple{String,Int,Int}}[]
+    ds = NamedTuple{(:description, :points_scored, :points_total),Tuple{String,Real,Real}}[]
     push_result!(ds, res, "", delim)
     return ds
 end

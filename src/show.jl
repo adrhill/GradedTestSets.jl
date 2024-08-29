@@ -11,6 +11,15 @@ function print_graded_results(io::IO, ts::GradedTestSet, depth_pad=0)
     return print_graded_results(io, result(ts), depth_pad)
 end
 
+# Convert number to integer if reasonable to avoid floating point representation
+function display_number(n::Number)
+    if n == round(n)
+        return Int(n)
+    else
+        return n
+    end
+end
+
 function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
     scored = res.points_scored
     total = res.points_total
@@ -43,13 +52,14 @@ function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
     line_width = align + pass_width + fail_width + total_width + 7
     println(io, "≡"^line_width)
     print(io, "Final score: ")
-    printstyled(io, scored; color=:green)
+    printstyled(io, display_number(scored); color=:green)
     print(io, " / ")
-    printstyled(io, total; color=Base.info_color())
+    printstyled(io, display_number(total); color=Base.info_color())
     println(io)
 end
 
 function _category_width(category_name, count)
+    count = round(Int, count)
     digits = count > 0 ? ndigits(count) : 0
     return digits > 0 ? max(length(category_name), digits) : 0
 end
@@ -79,14 +89,14 @@ function print_counts(
     print(io, rpad(string("  "^depth, res.description), align, " "), " | ")
 
     if scored > 0
-        printstyled(io, lpad(string(scored), pass_width, " "), "  "; color=:green)
+        printstyled(io, lpad(string(display_number(scored)), pass_width, " "), "  "; color=:green)
     elseif pass_width > 0 # No scored at this level, but some at another level
         print(io, lpad(" ", pass_width), "  ")
     end
 
     if fails > 0
         printstyled(
-            io, lpad(string(fails), fail_width, " "), "  "; color=Base.error_color()
+            io, lpad(string(display_number(fails)), fail_width, " "), "  "; color=Base.error_color()
         )
     elseif fail_width > 0 # No fails at this level, but some at another level
         print(io, lpad(" ", fail_width), "  ")
@@ -96,7 +106,7 @@ function print_counts(
         printstyled(io, lpad("None", total_width, " "), "  "; color=Base.info_color())
     else
         printstyled(
-            io, lpad(string(total), total_width, " "), "  "; color=Base.info_color()
+            io, lpad(string(display_number(total)), total_width, " "), "  "; color=Base.info_color()
         )
     end
     println(io)
