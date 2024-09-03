@@ -8,7 +8,7 @@ using Test: get_testset_depth, get_testset
 
 mutable struct GradedTestSet <: AbstractTestSet
     description::String
-    points::Int # points scored if all sub-tests pass
+    points::Float64 # points scored if all sub-tests pass
     results::Vector{Any}
 end
 GradedTestSet(desc; points=0) = GradedTestSet(desc, points, [])

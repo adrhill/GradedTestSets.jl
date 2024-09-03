@@ -11,6 +11,15 @@ function print_graded_results(io::IO, ts::GradedTestSet, depth_pad=0)
     return print_graded_results(io, result(ts), depth_pad)
 end
 
+# Convert number to integer if reasonable to avoid floating point representation
+function display_number(n::Number)
+    if n == round(n)
+        return Int(n)
+    else
+        return n
+    end
+end
+
 function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
     scored = res.points_scored
     total = res.points_total
@@ -50,7 +59,7 @@ function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
 end
 
 function _category_width(category_name, count)
-    digits = count > 0 ? ndigits(count) : 0
+    digits = length(string(count))
     return digits > 0 ? max(length(category_name), digits) : 0
 end
 
