@@ -59,8 +59,7 @@ function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
 end
 
 function _category_width(category_name, count)
-    count = round(Int, count)
-    digits = count > 0 ? ndigits(count) : 0
+    digits = length(string(count))
     return digits > 0 ? max(length(category_name), digits) : 0
 end
 
