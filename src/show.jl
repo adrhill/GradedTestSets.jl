@@ -52,9 +52,9 @@ function print_graded_results(io::IO, res::GradingResult, depth_pad=0)
     line_width = align + pass_width + fail_width + total_width + 7
     println(io, "≡"^line_width)
     print(io, "Final score: ")
-    printstyled(io, display_number(scored); color=:green)
+    printstyled(io, scored; color=:green)
     print(io, " / ")
-    printstyled(io, display_number(total); color=Base.info_color())
+    printstyled(io, total; color=Base.info_color())
     println(io)
 end
 
@@ -89,14 +89,14 @@ function print_counts(
     print(io, rpad(string("  "^depth, res.description), align, " "), " | ")
 
     if scored > 0
-        printstyled(io, lpad(string(display_number(scored)), pass_width, " "), "  "; color=:green)
+        printstyled(io, lpad(string(scored), pass_width, " "), "  "; color=:green)
     elseif pass_width > 0 # No scored at this level, but some at another level
         print(io, lpad(" ", pass_width), "  ")
     end
 
     if fails > 0
         printstyled(
-            io, lpad(string(display_number(fails)), fail_width, " "), "  "; color=Base.error_color()
+            io, lpad(string(fails), fail_width, " "), "  "; color=Base.error_color()
         )
     elseif fail_width > 0 # No fails at this level, but some at another level
         print(io, lpad(" ", fail_width), "  ")
@@ -106,7 +106,7 @@ function print_counts(
         printstyled(io, lpad("None", total_width, " "), "  "; color=Base.info_color())
     else
         printstyled(
-            io, lpad(string(display_number(total)), total_width, " "), "  "; color=Base.info_color()
+            io, lpad(string(total), total_width, " "), "  "; color=Base.info_color()
         )
     end
     println(io)
