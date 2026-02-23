@@ -28,9 +28,20 @@ ts = @testset GradedTestSet "Homework 1" begin
     end
     @testset points = 3 "Exercise 2" begin
         @test sin(0) == 0
-        @test cos(0) == 1
+        @test cos(0) == 0  # wrong answer
     end
 end
+```
+
+Evaluating the test set shows a grading summary:
+
+```
+Grading Summary: | Scored  Missed  Total
+Homework 1       |    2.0     3.0    5.0
+  Exercise 1     |    2.0            2.0
+  Exercise 2     |            3.0    3.0
+════════════════════════════════════════
+Final score: 2.0 / 5.0
 ```
 
 ### Accessing Results
